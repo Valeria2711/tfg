@@ -19,10 +19,42 @@
     <?php 
       @include "./nav-bar.php";
     ?>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    
+    <div class="container col col-md-6">
+    <form action="submit-form.php" method="post">
+      <div class="mb-3">
+        <label for="deporte">Selecciona el deporte:</label>
+        <select id="deporte" name="deporte" class="form-control">
+          <!-- foreach de cada deporte -->
+          <option value="futbol">Fútbol</option>
+          <option value="tenis">Tenis</option>
+          <option value="natacion">Natación</option>
+          <!-- Agrega más opciones según tus instalaciones deportivas -->
+        </select>
+      </div>
+      <div class="mb-3">
+      <!-- foreach de cada instalacion -->
+        <label for="instalacion">Selecciona la instalación:</label>
+        <select id="instalacion" name="instalacion" class="form-control">
+          <option value="campo1">Campo 1</option>
+          <option value="campo2">Campo 2</option>
+          <option value="piscina">Piscina</option>
+          <!-- Agrega más opciones según tus instalaciones deportivas -->
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="fecha">Fecha a reservar:</label>
+        <input type="date" id="fecha" name="fecha" class="form-control">
+      </div>
+      <div class="mb-3">
+        <label for="hora_inicio">Hora de inicio:</label>
+        <input type="time" id="hora_inicio" name="hora_inicio" class="form-control">
+      </div>
+      <div class="mb-3">
+        <label for="hora_fin">Hora de fin:</label>
+        <input type="time" id="hora_fin" name="hora_fin" class="form-control">
+      </div>
+      <input type="submit" class="btn btn-primary" value="Reservar ahora">
+    </form>
+    </div>
   </body>
 </html>
