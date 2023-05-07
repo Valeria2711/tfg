@@ -19,7 +19,7 @@
         <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: #e3f2fd;">
             <div class="container-fluid">
             <a class="navbar-brand" href="./index.php">
-                <img src="/images/logoDAW.png" alt="Logo" width="40" class="d-inline-block align-text-top">
+                <img src="./images/logoDAW.png" alt="Logo" width="40" class="d-inline-block align-text-top">
                 Alquiler de instalaciones
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
