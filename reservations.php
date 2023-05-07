@@ -19,42 +19,59 @@
     <?php 
       @include "./nav-bar.php";
     ?>
-    <div class="container col col-md-6">
-    <form action="submit-form.php" method="post">
-      <div class="mb-3">
-        <label for="deporte">Selecciona el deporte:</label>
-        <select id="deporte" name="deporte" class="form-control">
-          <!-- foreach de cada deporte -->
-          <option value="futbol">Fútbol</option>
-          <option value="tenis">Tenis</option>
-          <option value="natacion">Natación</option>
-          <!-- Agrega más opciones según tus instalaciones deportivas -->
-        </select>
+    <div class="card col col-md-6">
+      <div class="card-body">
+        <form action="submit-form.php" method="post">
+          <div class="mb-3">
+            <label for="deporte">Selecciona el deporte:</label>
+            <select id="deporte" name="deporte" class="form-control">
+              <!-- TODO: foreach de cada deporte a la bd -->
+              <option value="futbol">Fútbol</option>
+              <option value="futbol_sala">Fútbol sala</option>
+              <option value="tenis">Tenis</option>
+              <option value="padel">Pádel</option>
+              <option value="petanca">Petanca</option>
+              <option value="rugby">Rugby</option>
+              <option value="baloncesto">Baloncesto</option>
+              <option value="voleibol">Voleibol</option>
+            </select>
+          </div>
+          <div class="mb-3">
+          <!-- foreach de cada instalacion -->
+            <label for="instalacion">Selecciona la instalación:</label>
+            <select id="instalacion" name="instalacion" class="form-control">
+              <option value="multideportiva_1">Multideportiva 1</option>
+              <option value="multideportiva_2">Multideportiva 2</option>
+              <option value="multideportiva_3">Multideportiva 3</option>
+              <option value="multideportiva_4">Multideportiva 4</option>
+              <option value="atletismo">Atletismo</option>
+              <option value="futbol_7_1">Fútbol 7 - 1</option>
+              <option value="futbol_7_2">Fútbol 7 - 2</option>
+              <option value="futbol_11">Fútbol 11</option>
+              <option value="padel_1">Pádel 1</option>
+              <option value="padel_2">Pádel 2</option>
+              <option value="tenis_1">Tenis 1</option>
+              <option value="tenis_2">Tenis 2</option>
+              <option value="petanca">Petanca</option>
+              <option value="rugby">Rugby</option>
+              <!-- Agrega más opciones según tus instalaciones deportivas -->
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="fecha">Fecha a reservar:</label>
+            <input type="date" id="fecha" name="fecha" class="form-control">
+          </div>
+          <div class="mb-3">
+            <label for="hora_inicio">Hora de inicio:</label>
+            <input type="time" id="hora_inicio" name="hora_inicio" class="form-control">
+          </div>
+          <div class="mb-3">
+            <label for="hora_fin">Hora de fin:</label>
+            <input type="time" id="hora_fin" name="hora_fin" class="form-control">
+          </div>
+          <input type="submit" class="btn btn-primary" value="Reservar ahora">
+        </form>
       </div>
-      <div class="mb-3">
-      <!-- foreach de cada instalacion -->
-        <label for="instalacion">Selecciona la instalación:</label>
-        <select id="instalacion" name="instalacion" class="form-control">
-          <option value="campo1">Campo 1</option>
-          <option value="campo2">Campo 2</option>
-          <option value="piscina">Piscina</option>
-          <!-- Agrega más opciones según tus instalaciones deportivas -->
-        </select>
-      </div>
-      <div class="mb-3">
-        <label for="fecha">Fecha a reservar:</label>
-        <input type="date" id="fecha" name="fecha" class="form-control">
-      </div>
-      <div class="mb-3">
-        <label for="hora_inicio">Hora de inicio:</label>
-        <input type="time" id="hora_inicio" name="hora_inicio" class="form-control">
-      </div>
-      <div class="mb-3">
-        <label for="hora_fin">Hora de fin:</label>
-        <input type="time" id="hora_fin" name="hora_fin" class="form-control">
-      </div>
-      <input type="submit" class="btn btn-primary" value="Reservar ahora">
-    </form>
     </div>
   </body>
 </html>
