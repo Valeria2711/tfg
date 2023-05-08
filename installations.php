@@ -21,7 +21,7 @@
     <!-- Use title if it's in the page YAML frontmatter -->
     <title>Nuestras instalaciones</title>
 
-    <link href="/images/favicon.png" rel="icon" type="image/png" />
+    <link href="favicon.ico" rel="icon" type="image/x-icon" />
 
     <style>
       .btn-reserva {
