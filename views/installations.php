@@ -58,7 +58,7 @@
     <div class="container text-center">
       <div class="row">
         <div class="col-sm-8">
-          <img src="./images/gifReservas.gif" class="rounded img-fluid" width="400px"/>
+          <img src="../images/gifReservas.gif" class="rounded img-fluid" width="400px"/>
         </div>
         <div class="col-sm-4">
           <p class="reserva">

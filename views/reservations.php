@@ -17,7 +17,7 @@
 
   <body >
     <?php 
-      @include "./nav-bar.php";
+      include "./nav-bar.php";
     ?>
     <div class="card col col-md-6">
       <div class="card-body">
@@ -25,36 +25,36 @@
           <div class="mb-3">
             <label for="deporte">Selecciona el deporte:</label>
             <select id="deporte" name="deporte" class="form-control">
-              <!-- TODO: foreach de cada deporte a la bd -->
-              <option value="futbol">Fútbol</option>
-              <option value="futbol_sala">Fútbol sala</option>
-              <option value="tenis">Tenis</option>
-              <option value="padel">Pádel</option>
-              <option value="petanca">Petanca</option>
-              <option value="rugby">Rugby</option>
-              <option value="baloncesto">Baloncesto</option>
-              <option value="voleibol">Voleibol</option>
+            <option value="">Selecciona un deporte</option>
+              <?php
+                require_once( "../model/bdConnection.php" );
+                $connection=new Conexion( 'alquiler_instalaciones' );
+                $consulta = "SELECT nombre from tbl_deportes";
+                $result = $connection->realizar_consulta( $consulta );
+                $deportes = explode( ";", $result );
+                foreach ( $deportes as $deporte ) {
+                  if( $deporte != "" )
+                  echo "<option value='".str_replace(" ","_",strtolower($deporte))."'>$deporte</option>";
+                }
+              ?>
             </select>
           </div>
           <div class="mb-3">
           <!-- foreach de cada instalacion -->
             <label for="instalacion">Selecciona la instalación:</label>
             <select id="instalacion" name="instalacion" class="form-control">
-              <option value="multideportiva_1">Multideportiva 1</option>
-              <option value="multideportiva_2">Multideportiva 2</option>
-              <option value="multideportiva_3">Multideportiva 3</option>
-              <option value="multideportiva_4">Multideportiva 4</option>
-              <option value="atletismo">Atletismo</option>
-              <option value="futbol_7_1">Fútbol 7 - 1</option>
-              <option value="futbol_7_2">Fútbol 7 - 2</option>
-              <option value="futbol_11">Fútbol 11</option>
-              <option value="padel_1">Pádel 1</option>
-              <option value="padel_2">Pádel 2</option>
-              <option value="tenis_1">Tenis 1</option>
-              <option value="tenis_2">Tenis 2</option>
-              <option value="petanca">Petanca</option>
-              <option value="rugby">Rugby</option>
-              <!-- Agrega más opciones según tus instalaciones deportivas -->
+              <option value="">Selecciona una instalación</option>
+              <?php
+                require_once( "../model/bdConnection.php" );
+                $connection=new Conexion( 'alquiler_instalaciones' );
+                $consulta = "SELECT denominacion from tbl_instalaciones";
+                $result = $connection->realizar_consulta( $consulta );
+                $instalaciones = explode( ";", $result );
+                foreach ( $instalaciones as $instalacion ) {
+                  if( $instalacion != "" )
+                  echo "<option value='".str_replace(" ","_",strtolower($instalacion))."'>$instalacion</option>";
+                }
+              ?>
             </select>
           </div>
           <div class="mb-3">
