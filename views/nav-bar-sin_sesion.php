@@ -44,7 +44,10 @@
         <div class="d-flex">
             <ul class="navbar-nav"> 
                 <li class="nav-item">
-                    <a class="nav-link" href="./login.php" role="button">Mis reservas</a>
+                    <a class="nav-link" href="./login.php" role="button">Iniciar sesión</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="./register.php" role="button">Registrarse</a>
                 </li>
             </ul>
         </div>

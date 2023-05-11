@@ -1,13 +1,5 @@
 <?php
-	// if (!empty($_SERVER['HTTPS']) && ('on' == $_SERVER['HTTPS'])) {
-	// 	$uri = 'https://';
-	// } else {
-	// 	$uri = 'http://';
-	// }
-	// $uri .= $_SERVER['HTTP_HOST'];
-	// header('Location: '.$uri);
-	// // header('Location: '.$uri.'/dashboard/');
-	// exit;
+	
 ?>
 <!doctype html>
 <html lang="es">
@@ -27,7 +19,10 @@
 
   <body class="index">
     <?php 
-    @include "./nav-bar.php";
+    if(!isset($_COOKIE['sesion']) )
+      include "./nav-bar-sin_sesion.php";
+    else
+      include "./nav-bar.php";
     ?>
 
     <!-- Slider diferentes deportes que puedes realizar -->
