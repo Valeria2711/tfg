@@ -9,12 +9,11 @@ FROM
     tbl_deportes as depor 
 WHERE 
     depor_insta.id_instalacion = $instalacionSeleccionada 
-    AND depor_insta.id_deporte = insta.id_deporte;";
+    AND depor_insta.id_deporte = depor.id_deporte;";
 $result = $conn->query($sql);
 $selectDeportes = "";
 while ($row = $result->fetch_assoc()) {
-    $selectDeportes .= "<option value='" . $row["id_deporte"] . "'>" . $row["nombre"] . "</option>";
+    $selectDeportes .= "<option value='" . $row["id"] . "'>" . $row["nombre"] . "</option>";
 }
-echo $selectDeportes;
 return $selectDeportes;
 ?>

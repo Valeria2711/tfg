@@ -12,9 +12,9 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: #e3f2fd !important;">
     <div class="container-fluid">
         <a class="navbar-brand" href="./index.php">
-            <img src="../images/logoDAW.png" alt="Logo" width="40" class="d-inline-block align-text-top">
-            Alquiler de instalaciones
+            <img src="../images/logoDAW.png" alt="Logo" width="100" class="d-inline-block align-text-top">
         </a>
+        <a class="navbar-brand" href="./index.php">Alquiler de instalaciones</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>

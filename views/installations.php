@@ -21,7 +21,7 @@
     <!-- Use title if it's in the page YAML frontmatter -->
     <title>Nuestras instalaciones</title>
 
-    <link href="favicon.ico" rel="icon" type="image/x-icon" />
+    <link href="../favicon.ico" rel="icon" type="image/x-icon" />
 
     <style>
       .btn-reserva {
@@ -51,11 +51,14 @@
   </head>
 
   <body >
-    <?php 
-      @include "./nav-bar.php";
+  <?php 
+    if(!isset($_COOKIE['sesion']) )
+      include "./nav-bar-sin_sesion.php";
+    else
+      include "./nav-bar.php";
     ?>
     <br/>
-    <div class="container text-center">
+    <!-- <div class="container text-center">
       <div class="row">
         <div class="col-sm-8">
           <img src="../images/gifReservas.gif" class="rounded img-fluid" width="400px"/>
@@ -74,7 +77,7 @@
           <a href="./reservations.php"><button class="btn-reserva">¡Reserva ahora!</button></a>
         </div>
       </div>
-    </div>
+    </div> -->
   </body>
 </html>
 

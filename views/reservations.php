@@ -1,7 +1,7 @@
 <?php
 include_once("../model/Reserva.php");
 if(isset($_POST['reservar'])){
-  $reserva=new Reserva($_POST["deportes"],$_POST["instalaciones"],$_POST["hora_inicio"],$_POST["hora_fin"],$_POST["fecha"]);
+  $reserva=new Reserva($_POST["deportes"],$_POST["instalaciones"],$_POST["horaSeleccionada"],$_POST["fechaSeleccionada"]);
   $reserva->reservar();
   echo "Datos de la reserva: ".$reserva."<br/>";
   exit();
@@ -11,22 +11,27 @@ if(isset($_POST['reservar'])){
 <html lang="es">
   <head>
     <meta charset="utf-8">
-    <!-- Always force latest IE rendering engine or request Chrome Frame -->
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
-  <!-- Use title if it's in the page YAML frontmatter -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+    <!-- FlatPickr ( calendario ) -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+  
     <title>Nuestras instalaciones</title>
-
-    <link href="/images/favicon.png" rel="icon" type="image/png" />
-
+    <link href="../favicon.ico" rel="icon" type="image/x-icon" />
 
   </head>
 
   <body >
-    <?php 
+  <?php 
+    if(!isset($_COOKIE['sesion']) )
+      include "./nav-bar-sin_sesion.php";
+    else
       include "./nav-bar.php";
     ?>
     <div class="card col col-md-6">
@@ -34,8 +39,8 @@ if(isset($_POST['reservar'])){
         <form action="" method="post">
           <div class="mb-3">
             <label for="deportes">Selecciona el deporte:</label>
-            <!-- <select id="deporte" name="deporte" class="form-control" onchange="actualizarInstalaciones()"> -->
-              <select id="deportes" name="deportes" required class="form-control" >
+            <select id="deportes" name="deportes" class="form-control" onchange="actualizarInstalaciones()">
+              <!-- <select id="deportes" name="deportes" required class="form-control" > -->
             <option value=''>Selecciona un deporte</option>
               <?php
                 require_once( "../model/bdConnection.php" );
@@ -50,8 +55,8 @@ if(isset($_POST['reservar'])){
           </div>
           <div class="mb-3">
             <label for="instalaciones">Selecciona la instalación:</label>
-            <!-- <select id="instalaciones" name="instalaciones" class="form-control" onchange="actualizarDeportes()"> -->
-              <select id="instalaciones" name="instalaciones" required class="form-control" >
+            <select id="instalaciones" name="instalaciones" class="form-control" onchange="actualizarDeportes()">
+              <!-- <select id="instalaciones" name="instalaciones" required class="form-control" > -->
               <option value="">Selecciona una instalación</option>
               <?php
                 require_once( "../model/bdConnection.php" );
@@ -65,56 +70,88 @@ if(isset($_POST['reservar'])){
             </select>
           </div>
           <div class="mb-3">
-            <label for="fecha">Fecha a reservar:</label>
-            <input type="date" id="fecha" name="fecha" required class="form-control">
+            <label for="fechaSeleccionada">Fecha a reservar:</label>
+            <input type="text" id="fechaSeleccionada" placeholder="Seleccione una fecha">
+            <!-- <input type="date" id="fecha" name="fecha" required class="form-control"> -->
           </div>
           <div class="mb-3">
-            <label for="hora_inicio">Hora de inicio:</label>
-            <input type="time" id="hora_inicio" name="hora_inicio" required class="form-control">
+            <label for="horaSeleccionada">Hora a reservar:</label>
+            <input type="text" id="horaSeleccionada" placeholder="Seleccione una hora" class="form-control">
           </div>
-          <div class="mb-3">
+          <!-- <div class="mb-3">
             <label for="hora_fin">Hora de fin:</label>
             <input type="time" id="hora_fin" name="hora_fin" required class="form-control">
-          </div>
+          </div> -->
           <input type="submit" name="reservar" class="btn btn-primary" value="Reservar ahora">
         </form>
       </div>
     </div>
   </body>
   <script>
+    var flatpickr = flatpickr("#fechaSeleccionada", {
+      minDate: "today",
+      dateFormat: "d-m-Y",
+      altInput: true,
+      altFormat: "j F, Y",
+      maxDate: new Date().fp_incr(30),
+      "locale": {
+        "firstDayOfWeek": 1
+      }
+    });
+    function disableSpecificTimes(time) {
+        var disabledTimes = ['12:00am']; // Horas que deseas quitar del selector
+        return disabledTimes.indexOf(time) === -1;
+      }
+    // Inicializa el timepicker en el campo de entrada de texto
+    var timepicker = $("#horaSeleccionada").timepicker({
+      timeFormat: "HH:mm",
+      interval: 60,
+      dropdown: true,
+      disableTimeFn: disableSpecificTimes,
+      scrollbar: true,
+      minTime: '8:00',
+      maxTime: '22:00',
+    });
+
+    document.querySelector("#horaSeleccionada").addEventListener(
+      'click', function(event) {
+        timepicker.timepicker('open');
+      }
+    );
     function actualizarInstalaciones() {
       var deporteSeleccionado = $('#deportes').val();
-      
-      $.ajax({
-        url: '../controller/obtenerInstalaciones.php',
-        method: 'POST',
-        data: { deporte: deporteSeleccionado },
-        success: function(response) {
-          console.log(response);
-          // Actualizar el select de instalaciones con los datos recibidos
-          $('#instalaciones').html(response);
-        },
-        error: function() {
-          alert('Error al obtener las instalaciones.');
+      let formData = new FormData();
+      formData.append("deporte", deporteSeleccionado);
+      let xhr = new XMLHttpRequest();
+   		let url = '../controller/obtenerInstalaciones.php';
+      xhr.open("POST", url);
+      xhr.send(formData);
+      xhr.onload = function () {
+        if (xhr.status != 200) {
+          alert(`Error ${xhr.status}: ${xhr.statusText}`);
+        } else {
+          console.log(xhr.response);
+          $('#instalaciones').html(xhr.response);
         }
-      });
+      }
     }
     function actualizarDeportes() {
       var instalacionSeleccionada = $('#instalaciones').val();
-      
-      $.ajax({
-        url: '../controller/obtenerDeportes.php',
-        method: 'POST',
-        data: { instalacion: instalacionSeleccionada },
-        success: function(response) {
-          // Actualizar el select de instalaciones con los datos recibidos
-          $('#deportes').html(response);
-        },
-        error: function() {
-          alert('Error al obtener los deportes.');
+      let formData = new FormData();
+      formData.append("instalacion", instalacionSeleccionada);
+      let xhr = new XMLHttpRequest();
+   		let url = '../controller/obtenerDeportes.php';
+      xhr.open("POST", url);
+      xhr.send(formData);
+      xhr.onload = function () {
+        if (xhr.status != 200) {
+          alert(`Error ${xhr.status}: ${xhr.statusText}`);
+        } else {
+          console.log(xhr.response);
+          $('#deportes').html(xhr.response);
         }
-      });
-    }
+      }
+	  }
 
   </script>
 </html>

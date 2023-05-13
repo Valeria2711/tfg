@@ -1,7 +1,8 @@
 <?php
 
 require_once( "../model/bdConnection.php" );
-$deporteSeleccionado = $_GET["deporte"];
+
+$deporteSeleccionado = $_POST["deporte"];
 $sql = "SELECT 
   depor_insta.id_instalacion id, denominacion 
 FROM 
@@ -13,8 +14,7 @@ WHERE
 $result = $conn->query($sql);
 $selectInstalaciones = "";
 while ($row = $result->fetch_assoc()) {
-  $selectInstalaciones .= "<option value='" . $row["id_instalacion"] . "'>" . $row["denominacion"] . "</option>";
+  $selectInstalaciones .= "<option value='" . $row["id"] . "'>" . $row["denominacion"] . "</option>";
 }
-echo $selectInstalaciones;
 return $selectInstalaciones;
 ?>
