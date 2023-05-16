@@ -1,8 +1,9 @@
 <?php
 include_once("../model/Reserva.php");
 if(isset($_POST['reservar'])){
-  $reserva=new Reserva($_POST["deportes"],$_POST["instalaciones"],$_POST["horaSeleccionada"],$_POST["fechaSeleccionada"]);
-  $reserva->reservar();
+  $reserva=new Reserva($_POST["instalaciones"],1,$_POST["horaSeleccionada"],$_POST["fechaSeleccionada"]);
+  $result = $reserva->reservar();
+  echo $result;
   echo "Datos de la reserva: ".$reserva."<br/>";
   exit();
 }
@@ -41,7 +42,7 @@ if(isset($_POST['reservar'])){
             <label for="deportes">Selecciona el deporte:</label>
             <select id="deportes" name="deportes" class="form-control" onchange="actualizarInstalaciones()">
               <!-- <select id="deportes" name="deportes" required class="form-control" > -->
-            <option value=''>Selecciona un deporte</option>
+            <option value='0'>Selecciona un deporte</option>
               <?php
                 require_once( "../model/bdConnection.php" );
                 $result = $conn->query("SELECT id_deporte, nombre from tbl_deportes");
@@ -57,32 +58,37 @@ if(isset($_POST['reservar'])){
             <label for="instalaciones">Selecciona la instalación:</label>
             <select id="instalaciones" name="instalaciones" class="form-control" onchange="actualizarDeportes()">
               <!-- <select id="instalaciones" name="instalaciones" required class="form-control" > -->
-              <option value="">Selecciona una instalación</option>
+              <option value="0">Selecciona una instalación</option>
               <?php
                 require_once( "../model/bdConnection.php" );
-                $result = $conn->query("SELECT id_instalacion, denominacion from tbl_instalaciones");
-                while ($row = $result->fetch_assoc()) {
-                  $idInstalacion = $row['id_instalacion'];
-                  $denominacion = $row['denominacion'];
-                  echo "<option value='".$idInstalacion."'>".$denominacion."</option>";
-                }
+                  $result = $conn->query("SELECT id_instalacion, denominacion from tbl_instalaciones");
+                  while ($row = $result->fetch_assoc()) {
+                    $idInstalacion = $row['id_instalacion'];
+                    $denominacion = $row['denominacion'];
+                    echo "<option value='".$idInstalacion."'>".$denominacion."</option>";
+                  }
               ?>
             </select>
+            <input type="button" value="Reiniciar"/>
           </div>
           <div class="mb-3">
             <label for="fechaSeleccionada">Fecha a reservar:</label>
-            <input type="text" id="fechaSeleccionada" placeholder="Seleccione una fecha">
+            <input type="text" id="fechaSeleccionada" name="fechaSeleccionada" placeholder="Seleccione una fecha">
             <!-- <input type="date" id="fecha" name="fecha" required class="form-control"> -->
           </div>
           <div class="mb-3">
             <label for="horaSeleccionada">Hora a reservar:</label>
-            <input type="text" id="horaSeleccionada" placeholder="Seleccione una hora" class="form-control">
+            <input type="time" id="horaSeleccionada" name="horaSeleccionada" required class="form-control">
+              <!-- <div class="timeline" id="horaSeleccionada"> -->
+                <!-- Horas de disponibilidad se agregarán dinámicamente aquí -->
+              <!-- </div> -->
           </div>
           <!-- <div class="mb-3">
             <label for="hora_fin">Hora de fin:</label>
             <input type="time" id="hora_fin" name="hora_fin" required class="form-control">
           </div> -->
           <input type="submit" name="reservar" class="btn btn-primary" value="Reservar ahora">
+          <input type="reset" name="reset" class="btn btn-primary" value="Reiniciar formulario">
         </form>
       </div>
     </div>
@@ -90,7 +96,7 @@ if(isset($_POST['reservar'])){
   <script>
     var flatpickr = flatpickr("#fechaSeleccionada", {
       minDate: "today",
-      dateFormat: "d-m-Y",
+      dateFormat: "Y-m-d",
       altInput: true,
       altFormat: "j F, Y",
       maxDate: new Date().fp_incr(30),
@@ -119,39 +125,103 @@ if(isset($_POST['reservar'])){
       }
     );
     function actualizarInstalaciones() {
-      var deporteSeleccionado = $('#deportes').val();
-      let formData = new FormData();
-      formData.append("deporte", deporteSeleccionado);
-      let xhr = new XMLHttpRequest();
-   		let url = '../controller/obtenerInstalaciones.php';
-      xhr.open("POST", url);
-      xhr.send(formData);
-      xhr.onload = function () {
-        if (xhr.status != 200) {
-          alert(`Error ${xhr.status}: ${xhr.statusText}`);
-        } else {
-          console.log(xhr.response);
-          $('#instalaciones').html(xhr.response);
+      if($('#instalaciones').val() == '0'){
+        var deporteSeleccionado = $('#deportes').val();
+        let formData = new FormData();
+        formData.append("deporte", deporteSeleccionado);
+        let xhr = new XMLHttpRequest();
+        let url = '../controller/actualizarSelects.php';
+        xhr.open("POST", url);
+        xhr.send(formData);
+        xhr.onload = function () {
+          if (xhr.status != 200) {
+            alert(`Error ${xhr.status}: ${xhr.statusText}`);
+          } else {
+            console.log(xhr.response);
+            $('#instalaciones').html(xhr.response);
+          }
         }
       }
     }
     function actualizarDeportes() {
-      var instalacionSeleccionada = $('#instalaciones').val();
-      let formData = new FormData();
-      formData.append("instalacion", instalacionSeleccionada);
-      let xhr = new XMLHttpRequest();
-   		let url = '../controller/obtenerDeportes.php';
-      xhr.open("POST", url);
-      xhr.send(formData);
-      xhr.onload = function () {
-        if (xhr.status != 200) {
-          alert(`Error ${xhr.status}: ${xhr.statusText}`);
-        } else {
-          console.log(xhr.response);
-          $('#deportes').html(xhr.response);
+      if($('#deportes').val() == '0'){
+        var instalacionSeleccionada = $('#instalaciones').val();
+        let formData = new FormData();
+        formData.append("instalacion", instalacionSeleccionada);
+        let xhr = new XMLHttpRequest();
+        let url = '../controller/actualizarSelects.php';
+        xhr.open("POST", url);
+        xhr.send(formData);
+        xhr.onload = function () {
+          if (xhr.status != 200) {
+            alert(`Error ${xhr.status}: ${xhr.statusText}`);
+          } else {
+            console.log($('#deportes'));
+            console.log(xhr.response);
+            $('#deportes').html(xhr.response);
+          }
         }
       }
 	  }
+    function actualizarHoras() {
+        var timeline = document.getElementById('timeline');
+    
+        // Crear las horas de disponibilidad
+        for (var i = 8; i <= 22; i++) {
+            var divHour = document.createElement('div');
+            var hour = document.createElement('button');
+            hour.classList.add('hour');
+            hour.textContent = i.toString().padStart(2, '0') + ':00';
+            hour.addEventListener("click",seleccionarHora);
+            if (isHoraOcupada(i)) {
+                hour.classList.add('occupied');
+            }else{
+                hour.classList.add('available');
+            }
+            
+            divHour.appendChild(hour);
+            timeline.appendChild(hour);
+      }
+    }
+    function getHorasOcupadas(){
+      // var instalacion = document.getElementById("instalaciones").value;
+      // var deporte = document.getElementById("deportes").value;
+      // var fecha = document.getElementById("fecha").value;
+      // var url = "consulta_reservas.php?instalacion=" + instalacion + "&deporte=" + deporte + "&fecha=" + fecha;
+      var url = "";
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", url, true); // Utilizar la URL construida con los parámetros
+      xhr.onreadystatechange = function() {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+              // La llamada AJAX se completó con éxito
+              var response = xhr.responseText;
+              // Aquí puedes utilizar la respuesta recibida (los datos de las reservas)
+              // para generar la línea temporal o realizar cualquier otra operación
+          }
+      };
+      xhr.send(formData);
+    }
+    function isHoraOcupada(hora) {
+        for (var i = 0; i < reservas.length; i++) {
+            var reserva = reservas[i];
+            var horaInicio = parseInt(reserva.hora_inicio.split(':')[0]);
+            var horaFin = parseInt(reserva.hora_fin.split(':')[0]);
+            if (hora >= horaInicio && hora < horaFin) {
+            return true;
+            }
+        }
+        return false;
+    }
+    function seleccionarHora(e) {
+        var hora = e.target.textContent.split(':')[0] * 1;
+        if (e.target.classList.contains('available')) {
+            e.target.classList.add('selected');
+            e.target.classList.remove('available');
+            console.log(hora)
+        }else if (e.target.classList.contains('occupied')) {
+            alert("La hora seleccionada no se puede reservar, ya está ocupada")   
+        }
+    }
 
   </script>
 </html>
