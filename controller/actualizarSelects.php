@@ -1,11 +1,15 @@
 <?php
 require_once( "../model/bdConnection.php" );
 if(isset($_POST["deporte"])){
-  return getInstalaciones($conn, $_POST["deporte"]);
+  return actualizarInstalaciones($conn, $_POST["deporte"]);
 }else if (isset($_POST["instalacion"])){
-  return getDeportes($conn, $_POST["instalacion"]);
+  return actualizarDeportes($conn, $_POST["instalacion"]);
+}else if ( isset($_POST["get"]) && $_POST["get"] == "deportes" ){
+  return getDeportes($conn);
+}else if ( isset($_POST["get"]) && $_POST["get"] == "instalaciones"){
+  return getInstalaciones($conn);
 };
-function getInstalaciones($conn, $deporteSeleccionado){
+function actualizarInstalaciones($conn, $deporteSeleccionado){
   $sql = "SELECT 
     depor_insta.id_instalacion id, denominacion 
   FROM 
@@ -22,7 +26,7 @@ function getInstalaciones($conn, $deporteSeleccionado){
   echo $selectInstalaciones;
   return $selectInstalaciones;
 }
-function getDeportes( $conn, $instalacionSeleccionada ){
+function actualizarDeportes( $conn, $instalacionSeleccionada ){
   $sql = "SELECT depor_insta.id_deporte id, nombre 
   FROM 
       tbl_deporte_instalacion as depor_insta,
@@ -37,5 +41,23 @@ function getDeportes( $conn, $instalacionSeleccionada ){
   }
   echo $selectDeportes;
   return $selectDeportes;
+}
+function getDeportes ($conn) {
+  $result = $conn->query("SELECT id_deporte, nombre from tbl_deportes");
+  echo  "<option value='0'>Selecciona un deporte</option>";
+  while ($row = $result->fetch_assoc()) {
+    $idDeporte = $row['id_deporte'];
+    $nombre = $row['nombre'];
+    echo "<option value='".$idDeporte."'>".$nombre."</option>";
+  }
+}
+function getInstalaciones ($conn) {
+  $result = $conn->query("SELECT id_instalacion, denominacion from tbl_instalaciones");
+  echo "<option value='0'>Selecciona una instalación</option>";
+  while ($row = $result->fetch_assoc()) {
+    $idInstalacion = $row['id_instalacion'];
+    $denominacion = $row['denominacion'];
+    echo "<option value='".$idInstalacion."'>".$denominacion."</option>";
+  }
 }
 ?>

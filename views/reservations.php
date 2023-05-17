@@ -34,42 +34,25 @@ if(isset($_POST['reservar'])){
       include "./nav-bar-sin_sesion.php";
     else
       include "./nav-bar.php";
-    ?>
+  ?>
     <div class="card col col-md-6">
       <div class="card-body">
         <form action="" method="post">
           <div class="mb-3">
             <label for="deportes">Selecciona el deporte:</label>
-            <select id="deportes" name="deportes" class="form-control" onchange="actualizarInstalaciones()">
-              <!-- <select id="deportes" name="deportes" required class="form-control" > -->
-            <option value='0'>Selecciona un deporte</option>
-              <?php
-                require_once( "../model/bdConnection.php" );
-                $result = $conn->query("SELECT id_deporte, nombre from tbl_deportes");
-                while ($row = $result->fetch_assoc()) {
-                  $idDeporte = $row['id_deporte'];
-                  $nombre = $row['nombre'];
-                  echo "<option value='".$idDeporte."'>".$nombre."</option>";
-                }
-              ?>
-            </select>
+            <div class="input-group">
+              <select id="deportes" name="deportes" class="form-control" onchange="actualizarInstalaciones()">
+              </select>
+              <input type="button" class="btn btn-primary" id="btn-reset-deportes" value="Reiniciar" onclick="cargarDeportes()"/>
+            </div>
           </div>
-          <div class="mb-3">
+          <div class="mb-3 input-group">
             <label for="instalaciones">Selecciona la instalación:</label>
-            <select id="instalaciones" name="instalaciones" class="form-control" onchange="actualizarDeportes()">
-              <!-- <select id="instalaciones" name="instalaciones" required class="form-control" > -->
-              <option value="0">Selecciona una instalación</option>
-              <?php
-                require_once( "../model/bdConnection.php" );
-                  $result = $conn->query("SELECT id_instalacion, denominacion from tbl_instalaciones");
-                  while ($row = $result->fetch_assoc()) {
-                    $idInstalacion = $row['id_instalacion'];
-                    $denominacion = $row['denominacion'];
-                    echo "<option value='".$idInstalacion."'>".$denominacion."</option>";
-                  }
-              ?>
-            </select>
-            <input type="button" value="Reiniciar"/>
+            <div class="input-group">
+              <select id="instalaciones" name="instalaciones" class="form-control" onchange="actualizarDeportes()">
+              </select>
+              <input type="button" class="btn btn-primary" id="btn-reset-instalaciones" value="Reiniciar" onclick="cargarInstalaciones()"/>
+            </div>
           </div>
           <div class="mb-3">
             <label for="fechaSeleccionada">Fecha a reservar:</label>
@@ -77,16 +60,12 @@ if(isset($_POST['reservar'])){
             <!-- <input type="date" id="fecha" name="fecha" required class="form-control"> -->
           </div>
           <div class="mb-3">
-            <label for="horaSeleccionada">Hora a reservar:</label>
-            <input type="time" id="horaSeleccionada" name="horaSeleccionada" required class="form-control">
-              <!-- <div class="timeline" id="horaSeleccionada"> -->
-                <!-- Horas de disponibilidad se agregarán dinámicamente aquí -->
-              <!-- </div> -->
+            <!-- <label for="horaSeleccionada">Hora a reservar:</label> -->
+            <!-- <input type="time" id="horaSeleccionada" name="horaSeleccionada" required class="form-control"> -->
+            <div class="timeline" id="timeline">
+              <!-- Horas de disponibilidad se agregarán dinámicamente aquí -->
+            </div>
           </div>
-          <!-- <div class="mb-3">
-            <label for="hora_fin">Hora de fin:</label>
-            <input type="time" id="hora_fin" name="hora_fin" required class="form-control">
-          </div> -->
           <input type="submit" name="reservar" class="btn btn-primary" value="Reservar ahora">
           <input type="reset" name="reset" class="btn btn-primary" value="Reiniciar formulario">
         </form>
@@ -104,28 +83,27 @@ if(isset($_POST['reservar'])){
         "firstDayOfWeek": 1
       }
     });
-    function disableSpecificTimes(time) {
-        var disabledTimes = ['12:00am']; // Horas que deseas quitar del selector
-        return disabledTimes.indexOf(time) === -1;
-      }
-    // Inicializa el timepicker en el campo de entrada de texto
-    var timepicker = $("#horaSeleccionada").timepicker({
-      timeFormat: "HH:mm",
-      interval: 60,
-      dropdown: true,
-      disableTimeFn: disableSpecificTimes,
-      scrollbar: true,
-      minTime: '8:00',
-      maxTime: '22:00',
-    });
+    // function disableSpecificTimes(time) {
+    //     var disabledTimes = ['12:00am']; // Horas que deseas quitar del selector
+    //     return disabledTimes.indexOf(time) === -1;
+    //   }
+    // // Inicializa el timepicker en el campo de entrada de texto
+    // var timepicker = $("#horaSeleccionada").timepicker({
+    //   timeFormat: "HH:mm",
+    //   interval: 60,
+    //   dropdown: true,
+    //   disableTimeFn: disableSpecificTimes,
+    //   scrollbar: true,
+    //   minTime: '8:00',
+    //   maxTime: '22:00',
+    // });
 
-    document.querySelector("#horaSeleccionada").addEventListener(
-      'click', function(event) {
-        timepicker.timepicker('open');
-      }
-    );
+    // document.querySelector("#horaSeleccionada").addEventListener(
+    //   'click', function(event) {
+    //     timepicker.timepicker('open');
+    //   }
+    // );
     function actualizarInstalaciones() {
-      if($('#instalaciones').val() == '0'){
         var deporteSeleccionado = $('#deportes').val();
         let formData = new FormData();
         formData.append("deporte", deporteSeleccionado);
@@ -137,11 +115,20 @@ if(isset($_POST['reservar'])){
           if (xhr.status != 200) {
             alert(`Error ${xhr.status}: ${xhr.statusText}`);
           } else {
+            var selectElement = document.getElementById("deportes");
+            var options = selectElement.options;
+
+            for (var i = 0; i < options.length; i++) {
+              console.log(xhr.response);
+              var value = options[i].outerHTML;
+              console.log(value);
+            }
+
             console.log(xhr.response);
             $('#instalaciones').html(xhr.response);
           }
         }
-      }
+        
     }
     function actualizarDeportes() {
       if($('#deportes').val() == '0'){
@@ -156,7 +143,6 @@ if(isset($_POST['reservar'])){
           if (xhr.status != 200) {
             alert(`Error ${xhr.status}: ${xhr.statusText}`);
           } else {
-            console.log($('#deportes'));
             console.log(xhr.response);
             $('#deportes').html(xhr.response);
           }
@@ -166,7 +152,7 @@ if(isset($_POST['reservar'])){
     function actualizarHoras() {
         var timeline = document.getElementById('timeline');
     
-        // Crear las horas de disponibilidad
+        // TODO sql to tbl reservas desde instalacion seleccionada
         for (var i = 8; i <= 22; i++) {
             var divHour = document.createElement('div');
             var hour = document.createElement('button');
@@ -183,6 +169,73 @@ if(isset($_POST['reservar'])){
             timeline.appendChild(hour);
       }
     }
+    var reservas = [
+        { hora_inicio: '08:00', hora_fin: '10:00' },
+        { hora_inicio: '13:00', hora_fin: '14:00' },
+        // ...
+    ];
+    function isHoraOcupada(hora) {
+        for (var i = 0; i < reservas.length; i++) {
+            var reserva = reservas[i];
+            var horaInicio = parseInt(reserva.hora_inicio.split(':')[0]);
+            var horaFin = parseInt(reserva.hora_fin.split(':')[0]);
+            
+            if (hora >= horaInicio && hora < horaFin) {
+            return true;
+            }
+        }
+        return false;
+    }
+    function seleccionarHora(e) {
+        var hora = e.target.textContent.split(':')[0] * 1;
+        if (e.target.classList.contains('available')) {
+            e.target.classList.add('selected');
+            e.target.classList.remove('available');
+            console.log(hora)
+        }else if (e.target.classList.contains('occupied')) {
+            alert("La hora seleccionada no se puede reservar, ya está ocupada")   
+        }
+    }
+    document.addEventListener("DOMContentLoaded", function() {
+      cargarDeportes();
+      cargarInstalaciones();
+      $('timeline').hide = true;
+    });
+    function cargarDeportes() {
+        let formData = new FormData();
+        formData.append("get", "deportes");
+        let xhr = new XMLHttpRequest();
+        let url = '../controller/actualizarSelects.php';
+        xhr.open("POST", url);
+        xhr.send(formData);
+        xhr.onload = function () {
+          if (xhr.status != 200) {
+            alert(`Error ${xhr.status}: ${xhr.statusText}`);
+          } else {         
+            console.log(xhr.response);
+            $('#deportes').html(xhr.response);
+          }
+        }
+    }
+
+    function cargarInstalaciones() {
+        let formData = new FormData();
+        formData.append("get", "instalaciones");
+        let xhr = new XMLHttpRequest();
+        let url = '../controller/actualizarSelects.php';
+        xhr.open("POST", url);
+        xhr.send(formData);
+        xhr.onload = function () {
+          if (xhr.status != 200) {
+            alert(`Error ${xhr.status}: ${xhr.statusText}`);
+          } else {
+            console.log($('#instalaciones'));
+            console.log(xhr.response);
+            $('#instalaciones').html(xhr.response);
+          }
+        }
+    }
+
     function getHorasOcupadas(){
       // var instalacion = document.getElementById("instalaciones").value;
       // var deporte = document.getElementById("deportes").value;

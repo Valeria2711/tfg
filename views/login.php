@@ -1,22 +1,37 @@
 <?php
 
-require_once( "../model/Conexion.php" );
-$conexion = new Conexion( 'alquiler_instalaciones' );
+require_once( "../model/bdConnection.php" );
+// $conexion = new Conexion( 'alquiler_instalaciones' );
 
-// Comprobar si se ha enviado el formulario de inicio de sesión
 if ( isset($_POST['enviar']) ) {
-    // Obtener los datos enviados del formulario
-    $correo = $_POST['email'];
-    $contrasenna = $_POST['password'];
-	$user = $conexion->realizar_consulta( "SELECT * from tbl_usuarios where (correo = '$correo' OR nombre_usuario = '$correo') AND contrasenna = '$contrasenna'" );
-    if ( $user ) {
-		session_start();
-		setcookie('sesion',$user["id_usuario"],time()-5000);
-		$_SESSION['sesion']=$user["id_usuario"];
-		header('Location: ../index.php');
-	}else{
-		echo "Usuario o contraseña incorrecta";
+    $usuarioCorreo = $_POST['usuario_correo'];
+	$contrasenna = $_POST['password'];
+
+	$sql = "SELECT * FROM tbl_usuarios WHERE nombre_usuario = '$usuarioCorreo' OR correo = '$usuarioCorreo'";
+	$result = $conn->prepare($sql);
+	$ret = $result->execute();
+	$row = $result->fetch(PDO::FETCH_ASSOC);
+	var_dump($row['contrasenna']);exit();
+	if ( $row['contrasenna'] == $contrasenna ) {
+		$_SESSION['usuario'] = $row;
+		header( "Location: ./index.php" );
+	} else {
+		header( "Location: ./login.php" );
 	}
+
+	
+
+
+    // $contrasenna = password_hash($_POST['password'],PASSWORD_DEFAULT);
+	// $user = $conexion->realizar_consulta( "SELECT * from tbl_usuarios where (correo = '$correo' OR nombre_usuario = '$correo') AND contrasenna = '$contrasenna'" );
+    // if ( $user ) {
+	// 	session_start();
+	// 	setcookie('sesion',$user["id_usuario"],time()-5000);
+	// 	$_SESSION['sesion'] = $user["id_usuario"];
+	// 	header('Location: ../index.php');
+	// }else{
+	// 	echo "Usuario o contraseña incorrecta";
+	// }
 }
 
 ?>
@@ -33,15 +48,15 @@ if ( isset($_POST['enviar']) ) {
 </head>
 <body>
     <?php 
-      @include "./nav-bar.php";
+      @include "./nav-bar-sin_sesion.php";
     ?>
 	<div class="container card">
 		<div class="card-body">
 			<h2>Iniciar sesión</h2>
 			<form method="POST" action="">
 				<div class="form-group">
-					<label for="email">Correo electrónico o usuario:</label>
-					<input type="text" class="form-control" name="email" id="email" placeholder="Ingresa tu correo electrónico">
+					<label for="usuario_correo">Correo electrónico o usuario:</label>
+					<input type="text" class="form-control" name="usuario_correo" id="usuario_correo" placeholder="Ingresa tu correo electrónico o nombre de usuario">
 				</div>
 				<div class="form-group">
 					<label for="password">Contraseña:</label>

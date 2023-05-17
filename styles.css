@@ -3,3 +3,32 @@ a {
     text-decoration: none;
     background-color: transparent;
 }
+
+.timeline {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 10px;
+    background-color: #f2f2f2;
+  }
+  
+  .hour {
+    width: 50px;
+    text-align: center;
+  }
+  
+  .hour:not(:last-child) {
+    border-right: 1px solid #ccc;
+  }
+  .occupied {
+      background-color: red;
+      color: white;
+  }
+  .available {
+      background-color: green;
+      color: white;
+  }
+  .selected {
+      background-color: orange;
+      color: white;
+  }
