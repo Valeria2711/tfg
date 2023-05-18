@@ -58,26 +58,19 @@
       include "./nav-bar.php";
     ?>
     <br/>
-    <!-- <div class="container text-center">
+    <div class="container text-center">
       <div class="row">
-        <div class="col-sm-8">
-          <img src="../images/gifReservas.gif" class="rounded img-fluid" width="400px"/>
+        <div class="col">
+          Column
         </div>
-        <div class="col-sm-4">
-          <p class="reserva">
-            ¿Buscas un lugar para practicar tu deporte favorito? 
-            ¡Reserva ahora en nuestras pistas deportivas y comienza 
-            a disfrutar de una experiencia única! Contamos con una 
-            amplia variedad de opciones, desde canchas de tenis y 
-            baloncesto hasta campos de fútbol y más. Con tarifas 
-            accesibles y horarios flexibles, estamos aquí para ayudarte 
-            a mantenerte activo y en forma. ¡No esperes más y reserva 
-            ahora tu espacio en nuestras pistas deportivas!
-          </p>
-          <a href="./reservations.php"><button class="btn-reserva">¡Reserva ahora!</button></a>
+        <div class="col">
+          Column
+        </div>
+        <div class="col">
+          Column
         </div>
       </div>
-    </div> -->
+    </div>
   </body>
 </html>
 

@@ -1,39 +1,38 @@
 <?php
 
 require_once( "../model/bdConnection.php" );
-// $conexion = new Conexion( 'alquiler_instalaciones' );
+if (isset($_POST['enviar'])) {
+    $usuario_correo = $_POST['usuario_correo'];
+    $password = $_POST['password'];
 
-if ( isset($_POST['enviar']) ) {
-    $usuarioCorreo = $_POST['usuario_correo'];
-	$contrasenna = $_POST['password'];
+    if (empty($usuario_correo) || empty($password)) {
+        echo "Debes completar todos los campos.";
+    } else {
+        $conn = new mysqli("localhost", "root", "", "alquiler_instalaciones");
 
-	$sql = "SELECT * FROM tbl_usuarios WHERE nombre_usuario = '$usuarioCorreo' OR correo = '$usuarioCorreo'";
-	$result = $conn->prepare($sql);
-	$ret = $result->execute();
-	$row = $result->fetch(PDO::FETCH_ASSOC);
-	var_dump($row['contrasenna']);exit();
-	if ( $row['contrasenna'] == $contrasenna ) {
-		$_SESSION['usuario'] = $row;
-		header( "Location: ./index.php" );
-	} else {
-		header( "Location: ./login.php" );
+        if ($conn->connect_error) {
+            die("Error de conexión: " . $conn->connect_error);
+        }
+
+        $sql = "SELECT * FROM tbl_usuarios WHERE (nombre_usuario = ? OR correo = ?) AND contrasenna = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("sss", $usuario_correo, $usuario_correo, $password);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        if ($result->num_rows === 1) {
+            echo "Inicio de sesión exitoso.";
+            $_SESSION['usuario_correo'] = $usuario_correo;
+            setcookie('user', $usuario_correo, time() + 3600, '/');
+            header('Location: ./index.php');   
+        } else {
+            echo "Credenciales inválidas.";
+        }
+
+        $stmt->close();
+        $conn->close();
 	}
-
-	
-
-
-    // $contrasenna = password_hash($_POST['password'],PASSWORD_DEFAULT);
-	// $user = $conexion->realizar_consulta( "SELECT * from tbl_usuarios where (correo = '$correo' OR nombre_usuario = '$correo') AND contrasenna = '$contrasenna'" );
-    // if ( $user ) {
-	// 	session_start();
-	// 	setcookie('sesion',$user["id_usuario"],time()-5000);
-	// 	$_SESSION['sesion'] = $user["id_usuario"];
-	// 	header('Location: ../index.php');
-	// }else{
-	// 	echo "Usuario o contraseña incorrecta";
-	// }
 }
-
 ?>
 <!DOCTYPE html>
 <html>

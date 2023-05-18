@@ -43,7 +43,7 @@
 
   <body class="index">
     <?php 
-    if(!isset($_COOKIE['sesion']) )
+    if(!isset($_COOKIE['user']) )
       include "./nav-bar-sin_sesion.php";
     else
       include "./nav-bar.php";
