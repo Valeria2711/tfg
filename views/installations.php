@@ -45,6 +45,12 @@
       .reserva {
         font-size: 20px;
       }
+      
+      .img-x {
+        width: 300px;
+        max-width: 300px;
+        height: auto;
+      }
 
     </style>
 
@@ -59,15 +65,76 @@
     ?>
     <br/>
     <div class="container text-center">
+      <div>
+        <h1>Nuestras instalaciones</h1>
+      </div>
       <div class="row">
         <div class="col">
-          Column
+          <div class="container row">
+            <a href="reservations.php">
+              <img class="img-x" src="../images/instalaciones/baloncesto.jpg" alt="Baloncesto">
+            </a> Baloncesto
+          </div>
         </div>
         <div class="col">
-          Column
+          <div class="container row">
+            <a href="reservations.php">
+              <img class="img-x" src="../images/instalaciones/multideportiva1.jpg" alt="Multideportiva 1">
+            </a> Multideportiva 1
+          </div>
         </div>
         <div class="col">
-          Column
+          <div class="container row">
+            <a href="reservations.php">
+              <img class="img-x" src="../images/instalaciones/multideportiva2.jpg" alt="Multideportiva 2">
+            </a> Multideportiva 2
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="container row">
+            <a href="reservations.php">
+              <img class="img-x" src="../images/instalaciones/futbol11.jpg" alt="Fútbol 11">
+            </a> Fútbol 11
+          </div>
+        </div>
+        <div class="col">
+          <div class="container row">
+            <a href="reservations.php">
+              <img class="img-x" src="../images/instalaciones/futbol7-1.jpg" alt="Fútbol 7 - 1">
+            </a> Fútbol 7 - 1
+          </div>
+        </div>
+        <div class="col">
+          <div class="container row">
+            <a href="reservations.php">
+              <img class="img-x" src="../images/instalaciones/futbol7-2.jpg" alt="Fútbol 7 - 2">
+            </a> Fútbol 7 - 2
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="container row">
+            <a href="reservations.php">
+              <img class="img-x" src="../images/instalaciones/padel1.jpg" alt="Pádel 1">
+            </a> Pádel 1
+          </div>
+        </div>
+        <div class="col">
+          <div class="container row">
+            <a href="reservations.php">
+              <img class="img-x" src="../images/instalaciones/padel2.jpg" alt="Pádel 2">
+            </a> Pádel 2
+          </div>
+        </div>
+        <div class="col">
+          <div class="container row">
+            <a href="reservations.php">
+              <img class="img-x" src="../images/instalaciones/voleibol.jpg" alt="Voleibol">
+            </a> Voleibol
+          </div>
         </div>
       </div>
     </div>

@@ -37,6 +37,10 @@
         font-size: 20px;
       }
 
+      /* .carousel, .carousel-inner > .item > img {
+        height: 100px;
+      } */
+
     </style>
 
   </head>
