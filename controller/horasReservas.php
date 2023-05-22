@@ -13,6 +13,10 @@ if ($result->num_rows > 0) {
         $horaInicio = $row;
         for ($i = 8; $i <= 22; $i++) {
             // TODO: si encuentra la $horaInicio en $i pasar a siguiente $i
+            // OPciones 
+             // - marcar esa opcion disabled, aunque se muestre
+             // - No aparezca esa opcion
+             // - aparezca la opcion en rojo y que saque alert si el usuario la selecciona
             $selectHoras .= "<option value='" . $i . ":00'>" . $hora . ":00</option>";
         }
     }

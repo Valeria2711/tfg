@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Línea Temporal</title>
+  <style>
+    .timeline {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 10px;
+      background-color: #f2f2f2;
+    }
+    
+    .hour {
+      width: 50px;
+      text-align: center;
+    }
+    
+    .hour:not(:last-child) {
+      border-right: 1px solid #ccc;
+    }
+    .occupied {
+        background-color: red;
+        color: white;
+    }
+    .available {
+        background-color: green;
+        color: white;
+    }
+    .selected {
+        background-color: orange;
+        color: white;
+    }
+
+  </style>
+</head>
+<body>
+  <h1>Línea Temporal</h1>
+  
+  <div class="timeline" id="timeline">
+    <!-- Horas de disponibilidad se agregarán dinámicamente aquí -->
+  </div>
+  
+  <script >
+    document.addEventListener('DOMContentLoaded', function() {
+        var timeline = document.getElementById('timeline');
+        for (var i = 8; i <= 22; i++) {
+            var divHour = document.createElement('div');
+            var hour = document.createElement('button');
+            hour.classList.add('hour');
+            hour.textContent = i.toString().padStart(2, '0') + ':00';
+            hour.addEventListener("click",seleccionarHora);
+            if (isHoraOcupada(i)) {
+                hour.classList.add('occupied');
+            }else{
+                hour.classList.add('available');
+            }
+            
+            divHour.appendChild(hour);
+            timeline.appendChild(hour);
+        }
+    });
+    var reservas = [
+        { hora_inicio: '08:00', hora_fin: '10:00' },
+        { hora_inicio: '13:00', hora_fin: '14:00' },
+        // ...
+    ];
+    function isHoraOcupada(hora) {
+        for (var i = 0; i < reservas.length; i++) {
+            var reserva = reservas[i];
+            var horaInicio = parseInt(reserva.hora_inicio.split(':')[0]);
+            var horaFin = parseInt(reserva.hora_fin.split(':')[0]);
+            
+            if (hora >= horaInicio && hora < horaFin) {
+            return true;
+            }
+        }
+        return false;
+    }
+    function seleccionarHora(e) {
+        var hora = e.target.textContent.split(':')[0] * 1;
+        if (e.target.classList.contains('available')) {
+            e.target.classList.add('selected');
+            e.target.classList.remove('available');
+            console.log(hora)
+        }else if (e.target.classList.contains('occupied')) {
+            alert("La hora seleccionada no se puede reservar, ya está ocupada")   
+        }
+    }
+
+  </script>
+</body>
+</html>
