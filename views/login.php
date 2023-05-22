@@ -14,7 +14,7 @@ if (isset($_POST['enviar'])) {
             die("Error de conexión: " . $conn->connect_error);
         }
 
-        $sql = "SELECT * FROM tbl_usuarios WHERE (nombre_usuario = ? OR correo = ?) AND contrasenna = ?";
+        $sql = "SELECT id_usuario FROM tbl_usuarios WHERE (nombre_usuario = ? OR correo = ?) AND contrasenna = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("sss", $usuario_correo, $usuario_correo, $password);
         $stmt->execute();
@@ -22,8 +22,9 @@ if (isset($_POST['enviar'])) {
         $result = $stmt->get_result();
         if ($result->num_rows === 1) {
             echo "Inicio de sesión exitoso.";
-            $_SESSION['usuario_correo'] = $usuario_correo;
-            setcookie('user', $usuario_correo, time() + 3600, '/');
+            $idUser = $result->fetch_assoc()["id_usuario"];
+            $_SESSION['usuario_correo'] = $idUser;
+            setcookie('user', $idUser, time() + 3600, '/');
             header('Location: ./index.php');   
         } else {
             echo "Credenciales inválidas.";

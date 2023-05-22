@@ -1,7 +1,7 @@
 <?php
 include_once("../model/Reserva.php");
-if(isset($_POST['reservar'])){
-  $reserva=new Reserva($_POST["instalaciones"],1,$_POST["horaSeleccionada"],$_POST["fechaSeleccionada"]);
+if(isset($_POST['reservar']) && isset($_COOKIE['user'])){
+  $reserva=new Reserva($_POST["instalaciones"],$_COOKIE['user'],$_POST["horaSeleccionada"],$_POST["fechaSeleccionada"]);
   $result = $reserva->reservar();
   echo $result;
   echo "Datos de la reserva: ".$reserva."<br/>";
@@ -17,6 +17,7 @@ if(isset($_POST['reservar'])){
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+    <script src="../js/reservations.js"></script>
     <!-- FlatPickr ( calendario ) -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -25,7 +26,6 @@ if(isset($_POST['reservar'])){
   
     <title>Nuestras instalaciones</title>
     <link href="../favicon.ico" rel="icon" type="image/x-icon" />
-
   </head>
 
   <body >
@@ -35,7 +35,7 @@ if(isset($_POST['reservar'])){
     else
       include "./nav-bar.php";
   ?>
-    <div class="card col col-md-6">
+    <div class="card col col-md-8">
       <div class="card-body">
         <form action="" method="post">
           <div class="mb-3">
@@ -56,15 +56,11 @@ if(isset($_POST['reservar'])){
           </div>
           <div class="mb-3">
             <label for="fechaSeleccionada">Fecha a reservar:</label>
-            <input type="text" id="fechaSeleccionada" name="fechaSeleccionada" placeholder="Seleccione una fecha">
+            <input type="text" id="fechaSeleccionada" name="fechaSeleccionada" placeholder="Seleccione una fecha" onchange="buscarHoras()">
             <!-- <input type="date" id="fecha" name="fecha" required class="form-control"> -->
           </div>
-          <div class="mb-3">
-            <!-- <label for="horaSeleccionada">Hora a reservar:</label> -->
-            <!-- <input type="time" id="horaSeleccionada" name="horaSeleccionada" required class="form-control"> -->
-            <div class="timeline" id="timeline">
-              <!-- Horas de disponibilidad se agregarán dinámicamente aquí -->
-            </div>
+          <div class=" mb-3 timeline" id="timeline">
+            <!-- Horas de disponibilidad se agregarán dinámicamente aquí -->
           </div>
           <input type="submit" name="reservar" class="btn btn-primary" value="Reservar ahora">
           <input type="reset" name="reset" class="btn btn-primary" value="Reiniciar formulario">
@@ -73,6 +69,19 @@ if(isset($_POST['reservar'])){
     </div>
   </body>
   <script>
+    window.onload = function() {  
+      var urlParams = new URLSearchParams(window.location.search);
+      var instalacion = urlParams.get('instalacion');
+      if (instalacion) {
+        var select = document.getElementById("instalaciones");
+        for (var i = 0; i < select.options.length; i++) {
+          if (select.options[i].value === instalacion) {
+            select.selectedIndex = i;
+            break;
+          }
+        }
+      }
+    }
     var flatpickr = flatpickr("#fechaSeleccionada", {
       minDate: "today",
       dateFormat: "Y-m-d",
@@ -83,60 +92,17 @@ if(isset($_POST['reservar'])){
         "firstDayOfWeek": 1
       }
     });
-    // function disableSpecificTimes(time) {
-    //     var disabledTimes = ['12:00am']; // Horas que deseas quitar del selector
-    //     return disabledTimes.indexOf(time) === -1;
-    //   }
-    // // Inicializa el timepicker en el campo de entrada de texto
-    // var timepicker = $("#horaSeleccionada").timepicker({
-    //   timeFormat: "HH:mm",
-    //   interval: 60,
-    //   dropdown: true,
-    //   disableTimeFn: disableSpecificTimes,
-    //   scrollbar: true,
-    //   minTime: '8:00',
-    //   maxTime: '22:00',
-    // });
 
-    // document.querySelector("#horaSeleccionada").addEventListener(
-    //   'click', function(event) {
-    //     timepicker.timepicker('open');
-    //   }
-    // );
-    function actualizarInstalaciones() {
-        var deporteSeleccionado = $('#deportes').val();
+    function buscarHoras() {
+      $('timeline').hide = false;
+      var fecha = document.getElementById("fechaSeleccionada").value;
+      var instalacion = document.getElementById("instalaciones").value;
+      if(instalacion != '0'){
         let formData = new FormData();
-        formData.append("deporte", deporteSeleccionado);
+        formData.append("instalacion", instalacion);
+        formData.append("fecha", fecha);
         let xhr = new XMLHttpRequest();
-        let url = '../controller/actualizarSelects.php';
-        xhr.open("POST", url);
-        xhr.send(formData);
-        xhr.onload = function () {
-          if (xhr.status != 200) {
-            alert(`Error ${xhr.status}: ${xhr.statusText}`);
-          } else {
-            var selectElement = document.getElementById("deportes");
-            var options = selectElement.options;
-
-            for (var i = 0; i < options.length; i++) {
-              console.log(xhr.response);
-              var value = options[i].outerHTML;
-              console.log(value);
-            }
-
-            console.log(xhr.response);
-            $('#instalaciones').html(xhr.response);
-          }
-        }
-        
-    }
-    function actualizarDeportes() {
-      if($('#deportes').val() == '0'){
-        var instalacionSeleccionada = $('#instalaciones').val();
-        let formData = new FormData();
-        formData.append("instalacion", instalacionSeleccionada);
-        let xhr = new XMLHttpRequest();
-        let url = '../controller/actualizarSelects.php';
+        let url = '../controller/horasReservas.php';
         xhr.open("POST", url);
         xhr.send(formData);
         xhr.onload = function () {
@@ -144,137 +110,9 @@ if(isset($_POST['reservar'])){
             alert(`Error ${xhr.status}: ${xhr.statusText}`);
           } else {
             console.log(xhr.response);
-            $('#deportes').html(xhr.response);
           }
         }
       }
-	  }
-    function actualizarHoras() {
-        var timeline = document.getElementById('timeline');
-    
-        // TODO sql to tbl reservas desde instalacion seleccionada
-        for (var i = 8; i <= 22; i++) {
-            var divHour = document.createElement('div');
-            var hour = document.createElement('button');
-            hour.classList.add('hour');
-            hour.textContent = i.toString().padStart(2, '0') + ':00';
-            hour.addEventListener("click",seleccionarHora);
-            if (isHoraOcupada(i)) {
-                hour.classList.add('occupied');
-            }else{
-                hour.classList.add('available');
-            }
-            
-            divHour.appendChild(hour);
-            timeline.appendChild(hour);
-      }
     }
-    var reservas = [
-        { hora_inicio: '08:00', hora_fin: '10:00' },
-        { hora_inicio: '13:00', hora_fin: '14:00' },
-        // ...
-    ];
-    function isHoraOcupada(hora) {
-        for (var i = 0; i < reservas.length; i++) {
-            var reserva = reservas[i];
-            var horaInicio = parseInt(reserva.hora_inicio.split(':')[0]);
-            var horaFin = parseInt(reserva.hora_fin.split(':')[0]);
-            
-            if (hora >= horaInicio && hora < horaFin) {
-            return true;
-            }
-        }
-        return false;
-    }
-    function seleccionarHora(e) {
-        var hora = e.target.textContent.split(':')[0] * 1;
-        if (e.target.classList.contains('available')) {
-            e.target.classList.add('selected');
-            e.target.classList.remove('available');
-            console.log(hora)
-        }else if (e.target.classList.contains('occupied')) {
-            alert("La hora seleccionada no se puede reservar, ya está ocupada")   
-        }
-    }
-    document.addEventListener("DOMContentLoaded", function() {
-      cargarDeportes();
-      cargarInstalaciones();
-      $('timeline').hide = true;
-    });
-    function cargarDeportes() {
-        let formData = new FormData();
-        formData.append("get", "deportes");
-        let xhr = new XMLHttpRequest();
-        let url = '../controller/actualizarSelects.php';
-        xhr.open("POST", url);
-        xhr.send(formData);
-        xhr.onload = function () {
-          if (xhr.status != 200) {
-            alert(`Error ${xhr.status}: ${xhr.statusText}`);
-          } else {         
-            console.log(xhr.response);
-            $('#deportes').html(xhr.response);
-          }
-        }
-    }
-
-    function cargarInstalaciones() {
-        let formData = new FormData();
-        formData.append("get", "instalaciones");
-        let xhr = new XMLHttpRequest();
-        let url = '../controller/actualizarSelects.php';
-        xhr.open("POST", url);
-        xhr.send(formData);
-        xhr.onload = function () {
-          if (xhr.status != 200) {
-            alert(`Error ${xhr.status}: ${xhr.statusText}`);
-          } else {
-            console.log($('#instalaciones'));
-            console.log(xhr.response);
-            $('#instalaciones').html(xhr.response);
-          }
-        }
-    }
-
-    function getHorasOcupadas(){
-      // var instalacion = document.getElementById("instalaciones").value;
-      // var deporte = document.getElementById("deportes").value;
-      // var fecha = document.getElementById("fecha").value;
-      // var url = "consulta_reservas.php?instalacion=" + instalacion + "&deporte=" + deporte + "&fecha=" + fecha;
-      var url = "";
-      var xhr = new XMLHttpRequest();
-      xhr.open("GET", url, true); // Utilizar la URL construida con los parámetros
-      xhr.onreadystatechange = function() {
-          if (xhr.readyState === 4 && xhr.status === 200) {
-              // La llamada AJAX se completó con éxito
-              var response = xhr.responseText;
-              // Aquí puedes utilizar la respuesta recibida (los datos de las reservas)
-              // para generar la línea temporal o realizar cualquier otra operación
-          }
-      };
-      xhr.send(formData);
-    }
-    function isHoraOcupada(hora) {
-        for (var i = 0; i < reservas.length; i++) {
-            var reserva = reservas[i];
-            var horaInicio = parseInt(reserva.hora_inicio.split(':')[0]);
-            var horaFin = parseInt(reserva.hora_fin.split(':')[0]);
-            if (hora >= horaInicio && hora < horaFin) {
-            return true;
-            }
-        }
-        return false;
-    }
-    function seleccionarHora(e) {
-        var hora = e.target.textContent.split(':')[0] * 1;
-        if (e.target.classList.contains('available')) {
-            e.target.classList.add('selected');
-            e.target.classList.remove('available');
-            console.log(hora)
-        }else if (e.target.classList.contains('occupied')) {
-            alert("La hora seleccionada no se puede reservar, ya está ocupada")   
-        }
-    }
-
   </script>
 </html>

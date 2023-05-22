@@ -27,8 +27,6 @@ class Reserva {
                     '$this->fecha'
                 )";
         $result = $conn->query($sql);
-        // echo $sql;
-        // echo "AAAAAA";exit();
         return $result;
     }
     function importeReserva(){

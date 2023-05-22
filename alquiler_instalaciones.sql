@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 18-05-2023 a las 21:08:27
+-- Tiempo de generación: 22-05-2023 a las 19:16:31
 -- Versión del servidor: 5.7.36
 -- Versión de PHP: 7.4.26
 
@@ -46,9 +46,7 @@ INSERT INTO `tbl_deportes` (`id_deporte`, `nombre`) VALUES
 (5, 'Voleibol'),
 (6, 'Padel'),
 (7, 'Atletismo'),
-(8, 'Petanca'),
-(9, 'Balonmano'),
-(10, 'Rugby');
+(8, 'Balonmano');
 
 -- --------------------------------------------------------
 
@@ -72,29 +70,21 @@ INSERT INTO `tbl_deporte_instalacion` (`id_deporte`, `id_instalacion`) VALUES
 (1, 6),
 (1, 7),
 (1, 8),
-(2, 1),
 (2, 2),
 (2, 3),
-(2, 4),
 (3, 1),
 (3, 2),
 (3, 3),
-(3, 4),
 (4, 11),
 (4, 12),
-(5, 1),
 (5, 2),
 (5, 3),
 (5, 4),
 (6, 9),
 (6, 10),
 (7, 5),
-(8, 13),
-(9, 1),
-(9, 2),
-(9, 3),
-(9, 4),
-(10, 14);
+(8, 2),
+(8, 3);
 
 -- --------------------------------------------------------
 
@@ -118,10 +108,10 @@ CREATE TABLE IF NOT EXISTS `tbl_instalaciones` (
 --
 
 INSERT INTO `tbl_instalaciones` (`id_instalacion`, `denominacion`, `fk_deporte`, `fk_precio`) VALUES
-(1, 'Multideportiva 1', NULL, 1),
-(2, 'Multideportiva 2', NULL, 1),
-(3, 'Multideportiva 3', NULL, 5),
-(4, 'Multideportiva 4', NULL, 5),
+(1, 'Baloncesto', NULL, 1),
+(2, 'Multideportiva 1 ', NULL, 1),
+(3, 'Multideportiva 2', NULL, 5),
+(4, 'Voleibol', NULL, 5),
 (5, 'Atletismo', NULL, 4),
 (6, 'Futbol 7 - 1', NULL, 5),
 (7, 'Futbol 7 - 2', NULL, 5),
@@ -129,9 +119,7 @@ INSERT INTO `tbl_instalaciones` (`id_instalacion`, `denominacion`, `fk_deporte`,
 (9, 'Padel 1', NULL, 1),
 (10, 'Padel 2', NULL, 1),
 (11, 'Tenis 1', NULL, 1),
-(12, 'Tenis 2', NULL, 1),
-(13, 'Petanca', NULL, 2),
-(14, 'Rugby', NULL, 5);
+(12, 'Tenis 2', NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -166,20 +154,20 @@ INSERT INTO `tbl_precios` (`id_precio`, `precio`) VALUES
 DROP TABLE IF EXISTS `tbl_reservas`;
 CREATE TABLE IF NOT EXISTS `tbl_reservas` (
   `id_reserva` int(11) NOT NULL AUTO_INCREMENT,
-  `fk_pista` int(11) DEFAULT NULL,
+  `fk_instalacion` int(11) DEFAULT NULL,
   `fk_usuario` int(11) DEFAULT NULL,
   `hora_inicio` time DEFAULT NULL,
   `fecha` date DEFAULT NULL,
   PRIMARY KEY (`id_reserva`),
-  KEY `fk_pista` (`fk_pista`),
-  KEY `fk_usuario` (`fk_usuario`)
+  KEY `fk_usuario` (`fk_usuario`),
+  KEY `fk_instalacion` (`fk_instalacion`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `tbl_reservas`
 --
 
-INSERT INTO `tbl_reservas` (`id_reserva`, `fk_pista`, `fk_usuario`, `hora_inicio`, `fecha`) VALUES
+INSERT INTO `tbl_reservas` (`id_reserva`, `fk_instalacion`, `fk_usuario`, `hora_inicio`, `fecha`) VALUES
 (3, 11, 1, '09:00:00', '2023-05-31');
 
 -- --------------------------------------------------------
@@ -250,7 +238,7 @@ ALTER TABLE `tbl_instalaciones`
 -- Filtros para la tabla `tbl_reservas`
 --
 ALTER TABLE `tbl_reservas`
-  ADD CONSTRAINT `tbl_reservas_ibfk_1` FOREIGN KEY (`fk_pista`) REFERENCES `tbl_instalaciones` (`id_instalacion`),
+  ADD CONSTRAINT `tbl_reservas_ibfk_1` FOREIGN KEY (`fk_instalacion`) REFERENCES `tbl_instalaciones` (`id_instalacion`),
   ADD CONSTRAINT `tbl_reservas_ibfk_2` FOREIGN KEY (`fk_usuario`) REFERENCES `tbl_usuarios` (`id_usuario`);
 
 --
