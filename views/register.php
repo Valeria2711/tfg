@@ -54,7 +54,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     echo "Las contraseñas no coinciden";exit();
   }
 
-
   if( $error == "" )
   header('Location: login.php');
   // exit();

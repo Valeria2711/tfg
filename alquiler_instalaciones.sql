@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 22-05-2023 a las 19:16:31
+-- Tiempo de generación: 23-05-2023 a las 22:21:52
 -- Versión del servidor: 5.7.36
 -- Versión de PHP: 7.4.26
 
@@ -96,10 +96,8 @@ DROP TABLE IF EXISTS `tbl_instalaciones`;
 CREATE TABLE IF NOT EXISTS `tbl_instalaciones` (
   `id_instalacion` int(11) NOT NULL AUTO_INCREMENT,
   `denominacion` varchar(25) DEFAULT NULL,
-  `fk_deporte` int(11) DEFAULT NULL,
   `fk_precio` int(11) DEFAULT NULL,
   PRIMARY KEY (`id_instalacion`),
-  KEY `fk_deporte` (`fk_deporte`),
   KEY `fk_precio` (`fk_precio`)
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
 
@@ -107,19 +105,19 @@ CREATE TABLE IF NOT EXISTS `tbl_instalaciones` (
 -- Volcado de datos para la tabla `tbl_instalaciones`
 --
 
-INSERT INTO `tbl_instalaciones` (`id_instalacion`, `denominacion`, `fk_deporte`, `fk_precio`) VALUES
-(1, 'Baloncesto', NULL, 1),
-(2, 'Multideportiva 1 ', NULL, 1),
-(3, 'Multideportiva 2', NULL, 5),
-(4, 'Voleibol', NULL, 5),
-(5, 'Atletismo', NULL, 4),
-(6, 'Futbol 7 - 1', NULL, 5),
-(7, 'Futbol 7 - 2', NULL, 5),
-(8, 'Futbol 11', NULL, 3),
-(9, 'Padel 1', NULL, 1),
-(10, 'Padel 2', NULL, 1),
-(11, 'Tenis 1', NULL, 1),
-(12, 'Tenis 2', NULL, 1);
+INSERT INTO `tbl_instalaciones` (`id_instalacion`, `denominacion`, `fk_precio`) VALUES
+(1, 'Baloncesto', 1),
+(2, 'Multideportiva 1 ', 1),
+(3, 'Multideportiva 2', 5),
+(4, 'Voleibol', 5),
+(5, 'Atletismo', 4),
+(6, 'Futbol 7 - 1', 5),
+(7, 'Futbol 7 - 2', 5),
+(8, 'Futbol 11', 3),
+(9, 'Padel 1', 1),
+(10, 'Padel 2', 1),
+(11, 'Tenis 1', 1),
+(12, 'Tenis 2', 2);
 
 -- --------------------------------------------------------
 
@@ -130,7 +128,7 @@ INSERT INTO `tbl_instalaciones` (`id_instalacion`, `denominacion`, `fk_deporte`,
 DROP TABLE IF EXISTS `tbl_precios`;
 CREATE TABLE IF NOT EXISTS `tbl_precios` (
   `id_precio` int(11) NOT NULL AUTO_INCREMENT,
-  `precio` float DEFAULT NULL,
+  `precio` double DEFAULT NULL,
   PRIMARY KEY (`id_precio`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
 
@@ -161,14 +159,26 @@ CREATE TABLE IF NOT EXISTS `tbl_reservas` (
   PRIMARY KEY (`id_reserva`),
   KEY `fk_usuario` (`fk_usuario`),
   KEY `fk_instalacion` (`fk_instalacion`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `tbl_reservas`
 --
 
 INSERT INTO `tbl_reservas` (`id_reserva`, `fk_instalacion`, `fk_usuario`, `hora_inicio`, `fecha`) VALUES
-(3, 11, 1, '09:00:00', '2023-05-31');
+(3, 11, 7, '09:00:00', '2023-05-31'),
+(4, 11, 7, '08:00:00', '2023-05-31'),
+(5, 11, 7, '11:00:00', '2023-05-31'),
+(7, 11, 7, '14:00:00', '2023-05-31'),
+(9, 11, 7, '10:00:00', '2023-05-31'),
+(14, 10, 7, '08:00:00', '2023-05-24'),
+(38, 4, 7, '13:00:00', '2023-05-30'),
+(39, 1, 7, '08:00:00', '2023-05-27'),
+(40, 1, 7, '11:00:00', '2023-05-28'),
+(41, 5, 7, '08:00:00', '2023-05-30'),
+(42, 5, 7, '09:00:00', '2023-05-30'),
+(43, 5, 7, '08:00:00', '2023-05-24'),
+(44, 9, 7, '08:00:00', '2023-05-28');
 
 -- --------------------------------------------------------
 
@@ -231,7 +241,6 @@ INSERT INTO `tbl_usuarios_datos_extra` (`id`, `fk_usuario`, `dni`, `fecha_nacimi
 -- Filtros para la tabla `tbl_instalaciones`
 --
 ALTER TABLE `tbl_instalaciones`
-  ADD CONSTRAINT `tbl_instalaciones_ibfk_1` FOREIGN KEY (`fk_deporte`) REFERENCES `tbl_deportes` (`id_deporte`),
   ADD CONSTRAINT `tbl_instalaciones_ibfk_2` FOREIGN KEY (`fk_precio`) REFERENCES `tbl_precios` (`id_precio`);
 
 --
