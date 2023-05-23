@@ -25,7 +25,11 @@ if ($result->num_rows > 0) {
         echo $selectHoras;
     }
 } else {
+    for ($i = 8; $i <= 22; $i++) {
+        $selectHoras .= "<option value='" . $i . ":00'>" . $i . ":00";
+    }
     echo "No se encontraron reservas.";
+    echo $selectHoras;
 }
 
 $conn->close(); 

@@ -47,10 +47,13 @@ if (isset($_POST['enviar'])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 </head>
 <body>
-    <?php 
-      @include "./nav-bar-sin_sesion.php";
-    ?>
-	<div class="container card">
+<?php 
+    if(!isset($_COOKIE['user']) )
+      include "./nav-bar-sin_sesion.php";
+    else
+      include "./nav-bar.php";
+  ?>
+	<div class="container ">
 		<div class="card-body">
 			<h2>Iniciar sesión</h2>
 			<form method="POST" action="">

@@ -1,16 +1,4 @@
-<?php
-include_once("../model/Reserva.php");
-if(isset($_POST['reservar']) && isset($_COOKIE['user'])){
-  $reserva=new Reserva($_POST["instalaciones"],$_COOKIE['user'],$_POST["horaSeleccionada"],$_POST["fechaSeleccionada"]);
-  $result = $reserva->reservar();
-  // echo "<script>print($result)</script>";
-  echo "<h1>Datos de la reserva:</h1> ".$reserva."<br/>";
-  exit();
-} else if( !isset($_COOKIE['user']) ) {
-  echo "Error en la reserva";
-  echo '<script>alert("Error en la reserva, debe tener inciada la sesión y haber seleccionado todos los campos obligatorios.")</script>';
-}
-?>
+
 <!DOCTYPE html>
 <html lang="es">
   <head>
@@ -21,6 +9,9 @@ if(isset($_POST['reservar']) && isset($_COOKIE['user'])){
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
     <script src="../js/reservations.js"></script>
+    <!-- Alertas -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!-- FlatPickr ( calendario ) -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -38,8 +29,9 @@ if(isset($_POST['reservar']) && isset($_COOKIE['user'])){
     else
       include "./nav-bar.php";
   ?>
-    <div class="card col col-md-8">
+    <div class="container col col-md-8">
       <div class="card-body">
+			<h2>Reservar</h2>
         <form action="" method="post">
           <div class="mb-3">
             <label for="deportes">Selecciona el deporte:</label>
@@ -52,20 +44,23 @@ if(isset($_POST['reservar']) && isset($_COOKIE['user'])){
           <div class="mb-3 input-group">
             <label for="instalaciones">Selecciona la instalación:</label>
             <div class="input-group">
-              <select id="instalaciones" name="instalaciones" class="form-control" onchange="actualizarDeportes()">
+              <select id="instalaciones" name="instalaciones" class="form-control" required onchange="actualizarDeportes()">
               </select>
               <input type="button" class="btn btn-primary" id="btn-reset-instalaciones" value="Reiniciar" onclick="cargarInstalaciones()"/>
             </div>
           </div>
           <div class="mb-3">
             <label for="fechaSeleccionada">Fecha a reservar:</label>
-            <input type="text" id="fechaSeleccionada" name="fechaSeleccionada" placeholder="Seleccione una fecha" onchange="buscarHoras()">
+            <input type="text" id="fechaSeleccionada" name="fechaSeleccionada" required placeholder="Seleccione una fecha" onchange="buscarHoras()">
           </div>
-          <div class="mb-3 timeline input-group" >
-            <select id="horaSeleccionada" name="horaSeleccionada" class="form-control">
-              <!-- Horas de disponibilidad se agregarán dinámicamente aquí -->
-            </select>
-            <input type="button" class="btn btn-primary" id="btn-reset-instalaciones" value="Buscar horario disponible" onclick="buscarHoras()"/>
+          <div class="mb-3 timeline" >
+            <label for="horaSeleccionada">Hora a reservar:</label>
+            <div class="input-group">
+              <select id="horaSeleccionada" name="horaSeleccionada" required class="form-control">
+                <!-- Horas de disponibilidad se agregarán dinámicamente aquí -->
+              </select>
+              <input type="button" class="btn btn-primary" id="btn-reset-instalaciones" value="Buscar horario disponible" onclick="buscarHoras()"/>
+            </div>
           </div>
           <input type="submit" name="reservar" class="btn btn-primary" value="Reservar ahora">
           <input type="reset" name="reset" class="btn btn-primary" value="Reiniciar formulario">
@@ -102,28 +97,66 @@ if(isset($_POST['reservar']) && isset($_COOKIE['user'])){
       var fecha = document.getElementById("fechaSeleccionada").value;
       var instalacion = document.getElementById("instalaciones").value;
       if(fecha == "0" || instalacion == "0"){
-        alert("Debe seleccionar una fecha y una instalación para poder ofrecerle una información válida.")
+        Swal.fire({
+          title: 'Error',
+          text: 'Debe seleccionar una fecha y una instalación para poder ofrecerle una información válida.',
+          icon: 'error',
+          confirmButtonText: 'Aceptar'
+        });
       }else{
-      if(instalacion != '0'){
-        let formData = new FormData();
-        formData.append("instalacion", instalacion);
-        formData.append("fecha", fecha);
-        let xhr = new XMLHttpRequest();
-        let url = '../controller/horasReservas.php';
-        xhr.open("POST", url);
-        xhr.send(formData);
-        xhr.onload = function () {
-          if (xhr.status != 200) {
-            alert(`Error ${xhr.status}: ${xhr.statusText}`);
-          } else {
-            console.log(xhr.response);
-            $('#horaSeleccionada ').html(xhr.response);
+        if(instalacion != '0'){
+          let formData = new FormData();
+          formData.append("instalacion", instalacion);
+          formData.append("fecha", fecha);
+          let xhr = new XMLHttpRequest();
+          let url = '../controller/horasReservas.php';
+          xhr.open("POST", url);
+          xhr.send(formData);
+          xhr.onload = function () {
+            if (xhr.status != 200) {
+              alert(`Error ${xhr.status}: ${xhr.statusText}`);
+            } else {
+              console.log(xhr.response);
+              $('#horaSeleccionada ').html(xhr.response);
+            }
           }
         }
-      }
-      $('horaSeleccionada ').hidden = false;
       }
       
     }
   </script>
 </html>
+<?php
+include_once("../model/Reserva.php");
+if(isset($_POST['reservar']) && isset($_COOKIE['user'])){
+  $reserva=new Reserva($_POST["instalaciones"],$_COOKIE['user'],$_POST["horaSeleccionada"],$_POST["fechaSeleccionada"]);
+  $result = $reserva->reservar();
+  // echo "<h1>Datos de la reserva:</h1> ".$reserva."<br/>";
+  echo "<script>
+  Swal.fire({
+    title: '¡Éxito!',
+    html: 'Podrá acceder a los datos de la reserva en la página de <i>Mis reservas</i>',
+    icon: 'success',
+    confirmButtonText: 'Aceptar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      window.location.href = 'userReservations.php';
+    }
+})
+  </script>";
+  exit();
+// }
+}else if( !isset($_COOKIE['user']) && isset($_POST['reservar'])  ) {
+  // echo "Error en la reserva";
+  echo "<script>
+  Swal.fire({
+    title: 'Error!',
+    text: 'Error en la reserva, debe tener inciada la sesión y haber seleccionado todos los campos obligatorios.',
+    icon: 'error',
+    confirmButtonText: 'Aceptar'
+  })
+  // alert('Error en la reserva, debe tener inciada la sesión y haber seleccionado todos los campos obligatorios.')
+  </script>";
+}
+
+?>

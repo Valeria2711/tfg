@@ -1,26 +1,30 @@
 <?php
-
-$idUsuario = $_COOKIE['user'];
-
-function misReservas($idUsuario)
-{
-    require_once("../model/bdConnection.php");
-    $sql = "SELECT i.denominacion, r.hora_inicio, r.fecha
-    FROM tbl_reservas r
-    JOIN tbl_instalaciones i ON r.fk_instalacion = i.id_instalacion
-    WHERE r.fk_usuario = $idUsuario;";
-   
-    $result = $conn->query($sql);
-    $reservas = [];
-    while ($row = $result->fetch_assoc()) {
-        $reservas[] = $row;
+if( isset($_COOKIE['user'])){
+    $idUsuario = $_COOKIE['user'];
+    function misReservas($idUsuario)
+    {
+        require_once("../model/bdConnection.php");
+        $sql = "SELECT i.denominacion, r.hora_inicio, r.fecha, p.precio
+        FROM tbl_reservas r
+        JOIN tbl_instalaciones i ON r.fk_instalacion = i.id_instalacion
+        JOIN tbl_precios p ON i.fk_precio = p.id_precio
+        WHERE r.fk_usuario = $idUsuario;";
+       
+        $result = $conn->query($sql);
+        $reservas = [];
+        while ($row = $result->fetch_assoc()) {
+            $reservas[] = $row;
+        }
+    
+        $conn->close();
+    
+        return $reservas;
     }
-
-    $conn->close();
-
-    return $reservas;
+    $reservasUsuario = misReservas($idUsuario);    
 }
-$reservasUsuario = misReservas($idUsuario);
+else{
+    echo "LA SESIÓN HA CADUCADO O NO HA INICIADO SESIÓN";exit();
+}
 
 ?>
 
@@ -46,6 +50,7 @@ $reservasUsuario = misReservas($idUsuario);
                         <th>Fecha</th>
                         <th>Hora Inicio</th>
                         <th>Instalación</th>
+                        <th>Precio</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -55,6 +60,7 @@ $reservasUsuario = misReservas($idUsuario);
                             <td><?php echo $reserva['fecha']; ?></td>
                             <td><?php echo $reserva['hora_inicio']; ?></td>
                             <td><?php echo $reserva['denominacion']; ?></td>
+                            <td><?php echo $reserva['precio'] .".00€"; ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

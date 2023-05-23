@@ -68,8 +68,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link href="../favicon.ico" rel="icon" type="image/x-icon" />
 </head>
 <body>
-    <?php 
-      @include "./nav-bar.php";
+  <?php 
+      if(!isset($_COOKIE['user']) )
+        include "./nav-bar-sin_sesion.php";
+      else
+        include "./nav-bar.php";
     ?>
   <div class="container">
     <h1>Registro de Usuario</h1>

@@ -1,10 +1,10 @@
 <?php
 class Reserva {
-    private $id;
-    private $instalacion;
-    private $usuario;
-    private $hora;
-    private $fecha;
+    public $id;
+    public $instalacion;
+    public $usuario;
+    public $hora;
+    public $fecha;
     function __construct($instalacion,$usuario,$hora,$fecha)
     {
         $this->instalacion = $instalacion;
@@ -26,7 +26,7 @@ class Reserva {
         $result = $conn->query($sql);
         return $result;
     }
-    function importeReserva(){
+    public function importeReserva(){
         require_once( "Conexion.php" );
         $conn = new Conexion();
         $sql = "SELECT precio FROM tbl_precios WHERE id_precio = (SELECT fk_precio FROM tbl_instalaciones WHERE id_instalacion = $this->instalacion)";
@@ -35,11 +35,10 @@ class Reserva {
     }
     function __toString()
     {
-        return "<br/> Nº instalacion ➜ ".$this->instalacion."<br/> ID Usuario ➜ "
+        return "<div><br/> Nº instalacion ➜ ".$this->instalacion."<br/> ID Usuario ➜ "
         .$this->usuario."<br/> Hora inicio ➜ ".$this->hora."<br/> Fecha ➜ ".$this->fecha
         ."<br/><h1> El precio de la reserva es ➜ ".$this->importeReserva()."00€</h1>
-        <br/><br/>
-        <a type='button' href='reservations.php'>Volver</a>";
+        <br/><br/></div>";
 
     }
 }

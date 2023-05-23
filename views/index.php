@@ -40,9 +40,7 @@
       /* .carousel, .carousel-inner > .item > img {
         height: 100px;
       } */
-
     </style>
-
   </head>
 
   <body class="index">
@@ -52,7 +50,6 @@
     else
       include "./nav-bar.php";
     ?>
-
     <div class="container-sm justify-content-center" >
         <div id="sportsCarousel" class="carousel slide">
           <div class="carousel-inner">
@@ -109,6 +106,8 @@
         </div>
       </div>
     </div>
+    
+    <p></p>
   </body>
 </html>
 

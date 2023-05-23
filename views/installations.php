@@ -49,11 +49,15 @@
       gap: 2%;
     }
     
-    p {
+    .title {
       margin-top: 5px;
       font-size: 20px;
       font-family: 'Mikado', sans-serif;
       font-weight: 500;
+    }
+    .installations-body {
+      font-size: 16px;
+      font-family: 'Mikado', sans-serif;
     }
   </style>
 
@@ -76,73 +80,85 @@
         <a href="reservations.php?instalacion=1">
           <img class="img-x" src="../images/instalaciones/baloncesto.jpg" alt="Baloncesto">
         </a>
-        <p> Baloncesto </p>
+        <div class="title"> Baloncesto </div>
+        <div class="installations-body">Precio: 11.00€</div>
       </div>
       <div class="">
         <a href="reservations.php?instalacion=2">
           <img class="img-x" src="../images/instalaciones/multideportiva1.jpg" alt="Multideportiva 1">
         </a> 
-        <p>Multideportiva 1</p>
+        <div class="title">Multideportiva 1</div>
+        <div class="installations-body">Precio: 11.00€</div>
       </div>
       <div class="">
         <a href="reservations.php?instalacion=3">
           <img class="img-x" src="../images/instalaciones/multideportiva2.jpg" alt="Multideportiva 2">
         </a> 
-        <p> Multideportiva 2 </p>
+        <div class="title"> Multideportiva 2 </div>
+        <div class="installations-body">Precio: 15.00€</div>
       </div>
     <div class="">
       <a href="reservations.php?instalacion=4">
         <img class="img-x" src="../images/instalaciones/voleibol.jpg" alt="Voleibol">
       </a> 
-      <p> Voleibol </p>
+      <div class="title"> Voleibol </div>
+        <div class="installations-body">Precio: 15.00€</div>
     </div>
     <div class="">
       <a href="reservations.php?instalacion=5">
         <img class="img-x" src="../images/instalaciones/atletismo.jpg" alt="Atletismo">
       </a> 
-      <p> Atletismo </p>
+      <div class="title"> Atletismo </div>
+        <div class="installations-body">Precio: 7.00€</div>
     </div>
     <div class="">
       <a href="reservations.php?instalacion=6">
         <img class="img-x" src="../images/instalaciones/futbol7-1.jpg" alt="Fútbol 7 - 1">
       </a> 
-      <p> Fútbol 7 - 1 </p>
+      <div class="title"> Fútbol 7 - 1 </div>
+        <div class="installations-body">Precio: 15.00€</div>
     </div>
     <div class="">
       <a href="reservations.php?instalacion=7">
         <img class="img-x" src="../images/instalaciones/futbol7-2.jpg" alt="Fútbol 7 - 2">
       </a> 
-      <p> Fútbol 7 - 2 </p>
+      <div class="title"> Fútbol 7 - 2 </div>
+        <div class="installations-body">Precio: 15.00€</div>
     </div>
     <div class="">
       <a href="reservations.php?instalacion=8">
         <img class="img-x" src="../images/instalaciones/futbol11.jpg" alt="Fútbol 11">
       </a> 
-      <p> Fútbol 11 </p>
+      <div class="title"> Fútbol 11 </div>
+        <div class="installations-body">Precio: 20.00€</div>
     </div>
     <div class="">
       <a href="reservations.php?instalacion=9">
         <img class="img-x" src="../images/instalaciones/padel1.jpg" alt="Pádel 1">
       </a> 
-      <p> Pádel 1 </p>
+      <div class="title"> Pádel 1 </div>
+        <div class="installations-body">Precio: 11.00€</div>
     </div>
     <div class="">
       <a href="reservations.php?instalacion=10">
         <img class="img-x" src="../images/instalaciones/padel2.jpg" alt="Pádel 2">
       </a> 
-      <p> Pádel 2 </p>
+      <div class="title"> Pádel 2 </div>
+        <div class="installations-body">Precio: 11.00€</div>
     </div>
     <div class="">
       <a href="reservations.php?instalacion=11">
         <img class="img-x" src="../images/instalaciones/tenis1.jpg" alt="Tenis 1">
       </a> 
-      <p> Tenis 1 </p>
+      <div class="title"> Tenis 1 </div>
+        <div class="installations-body">Precio: 11.00€</div>
     </div>
     <div class="">
       <a href="reservations.php?instalacion=12">
         <img class="img-x" src="../images/instalaciones/tenis2.jpg" alt="Tenis 2">
       </a> 
-      <p> Tenis 2 </p>
+      <div class="title"> Tenis 2 </div>
+        <div class="installations-body">Precio: 5.00€</div>
     </div>
   </div>
 </body>
