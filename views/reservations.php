@@ -3,9 +3,12 @@ include_once("../model/Reserva.php");
 if(isset($_POST['reservar']) && isset($_COOKIE['user'])){
   $reserva=new Reserva($_POST["instalaciones"],$_COOKIE['user'],$_POST["horaSeleccionada"],$_POST["fechaSeleccionada"]);
   $result = $reserva->reservar();
-  echo $result;
-  echo "Datos de la reserva: ".$reserva."<br/>";
+  // echo "<script>print($result)</script>";
+  echo "<h1>Datos de la reserva:</h1> ".$reserva."<br/>";
   exit();
+} else if( !isset($_COOKIE['user']) ) {
+  echo "Error en la reserva";
+  echo '<script>alert("Error en la reserva, debe tener inciada la sesión y haber seleccionado todos los campos obligatorios.")</script>';
 }
 ?>
 <!DOCTYPE html>
@@ -57,10 +60,12 @@ if(isset($_POST['reservar']) && isset($_COOKIE['user'])){
           <div class="mb-3">
             <label for="fechaSeleccionada">Fecha a reservar:</label>
             <input type="text" id="fechaSeleccionada" name="fechaSeleccionada" placeholder="Seleccione una fecha" onchange="buscarHoras()">
-            <!-- <input type="date" id="fecha" name="fecha" required class="form-control"> -->
           </div>
-          <div class=" mb-3 timeline" id="timeline">
-            <!-- Horas de disponibilidad se agregarán dinámicamente aquí -->
+          <div class="mb-3 timeline input-group" >
+            <select id="horaSeleccionada" name="horaSeleccionada" class="form-control">
+              <!-- Horas de disponibilidad se agregarán dinámicamente aquí -->
+            </select>
+            <input type="button" class="btn btn-primary" id="btn-reset-instalaciones" value="Buscar horario disponible" onclick="buscarHoras()"/>
           </div>
           <input type="submit" name="reservar" class="btn btn-primary" value="Reservar ahora">
           <input type="reset" name="reset" class="btn btn-primary" value="Reiniciar formulario">
@@ -94,9 +99,11 @@ if(isset($_POST['reservar']) && isset($_COOKIE['user'])){
     });
 
     function buscarHoras() {
-      $('timeline').hide = false;
       var fecha = document.getElementById("fechaSeleccionada").value;
       var instalacion = document.getElementById("instalaciones").value;
+      if(fecha == "0" || instalacion == "0"){
+        alert("Debe seleccionar una fecha y una instalación para poder ofrecerle una información válida.")
+      }else{
       if(instalacion != '0'){
         let formData = new FormData();
         formData.append("instalacion", instalacion);
@@ -110,9 +117,13 @@ if(isset($_POST['reservar']) && isset($_COOKIE['user'])){
             alert(`Error ${xhr.status}: ${xhr.statusText}`);
           } else {
             console.log(xhr.response);
+            $('#horaSeleccionada ').html(xhr.response);
           }
         }
       }
+      $('horaSeleccionada ').hidden = false;
+      }
+      
     }
   </script>
 </html>

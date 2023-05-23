@@ -34,7 +34,7 @@
         <div class="d-flex">
             <ul class="navbar-nav"> 
                 <li class="nav-item">
-                    <a class="nav-link" href="./my-reservations.php" role="button">Mis reservas</a>
+                    <a class="nav-link" href="./userReservations.php" role="button">Mis reservas</a>
                 </li>
             </ul>
         </div>
