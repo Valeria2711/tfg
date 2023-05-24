@@ -36,6 +36,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="./userReservations.php" role="button">Mis reservas</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?php setcookie('user', '', time() - 3600, '/');?>" role="button">Cerrar sesión</a>
+                </li>
             </ul>
         </div>
     </div>

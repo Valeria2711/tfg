@@ -144,7 +144,7 @@ if(isset($_POST['reservar']) && isset($_COOKIE['user'])){
     }
 })
   </script>";
-  exit();
+  exit;
 // }
 }else if( !isset($_COOKIE['user']) && isset($_POST['reservar'])  ) {
   // echo "Error en la reserva";
